@@ -100,6 +100,8 @@ graph TD
     style S3 fill:#dfd,stroke:#333,stroke-width:2px 
     ```
 
+
+```
 ## 📋 Prerequisites
 
 Ensure the following dependencies are installed before running the application:
