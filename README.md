@@ -109,7 +109,6 @@ graph LR
     style Lambda fill:#D05C17,stroke:#fff,color:#fff
     style SNS fill:#CC2264,stroke:#fff,color:#fff,stroke-width:2px 
 ```    
-![Mein AWS Diagramm](architecture_aws.png)
 
 ## 📋 Prerequisites
 
