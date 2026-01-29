@@ -59,12 +59,12 @@ https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
 
 
 
-### 🏗 Architecture Highlights
+### ☁️ Cloud Infrastructure (AWS & Terraform) 
 * **Web & Database:** Hosted on **AWS EC2** (t2.micro) and **AWS RDS** (PostgreSQL 15). The network is secured via a **custom Security Group** ("grocery-app-firewall") allowing specific traffic on ports 22 (SSH), 80 (HTTP), 5000 (Flask), and 5432 (Postgres).
 * **Storage & Folders:** An **S3 Bucket** (`grocery-yssf`) manages assets with a dedicated `avatars/` directory structure, ensuring organized object storage.
 * **Security & IAM:** Implemented the **Principle of Least Privilege** using a custom IAM Role (`grocery-ec2-role`). This allows the EC2 instance and Lambda function to interact securely with S3 and SNS without using hardcoded credentials.
 
-### 🚨 Serverless Monitoring & Notifications
+### 🚨 Serverless(Lambda) Monitoring & Notifications
 We implemented a fully decoupled, event-driven pipeline:
 1. **S3 Event Trigger:** Automatically detects `s3:ObjectCreated:*` events in the bucket.
 2. **AWS Lambda:** A Python-based function ("Logger") that assumes the IAM role to process metadata and log system activity.
