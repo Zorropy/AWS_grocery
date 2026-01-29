@@ -1,5 +1,5 @@
 # Infrastructure for GroceryMate
-# Created by: mein name
+# Created by: Youssef El Maach
 # Tools: Terraform, AWS (EC2, RDS, S3, Lambda, SNS)
 
 # ==========================================================
