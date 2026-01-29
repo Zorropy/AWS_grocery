@@ -1,5 +1,9 @@
+# Infrastructure for GroceryMate
+# Created by: mein name
+# Tools: Terraform, AWS (EC2, RDS, S3, Lambda, SNS)
+
 # ==========================================================
-# TERRAFORM Konfiguration Woche 6 Projektaufgabe
+# TERRAFORM Konfiguration Projektaufgabe
 # ==========================================================
 
 # Legt den Cloud-Anbieter fest (hier AWS) und die Region für die Ressourcen
@@ -92,7 +96,7 @@ resource "aws_db_instance" "grocery_db" {
   instance_class      = "db.t3.micro"                       # Hardware-Leistung der Datenbank
   db_name             = "grocerymate_db"                    # Name der ersten Datenbank, die erstellt wird
   username            = "grocery_user"                      # Administrator-Benutzername
-  password            = "sosollessein"                      # Administrator-Passwort
+  password            = var.db_password                      # Administrator-Passwort
   skip_final_snapshot = true                                # Erstellt beim Löschen kein Backup (spart Zeit/Kosten im Test)
   publicly_accessible = true                                # Datenbank ist über das Internet erreichbar
 }

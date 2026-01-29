@@ -17,6 +17,7 @@
 - [Overview](#-overview)
 - [Features](#-features)
 - [Screenshots & Demo](#-screenshots--demo)
+- [Cloud Infrastructure](#-cloud-infrastructure-aws--terraform)
 - [Prerequisites](#-prerequisites)
 - [Installation](#-installation)
   - [Clone Repository](#-clone-repository)
@@ -31,7 +32,7 @@
 
 ## 🚀 Overview
 
-GroceryMate is an application developed as part of the Masterschools program by **Alejandro Roman Ibanez**. It is a modern, full-featured e-commerce platform designed for seamless online grocery shopping. It provides an intuitive user interface and a secure backend, allowing users to browse products, manage their shopping basket, and complete purchases efficiently.
+GroceryMate is an application developed as part of the Masterschools program by **Alejandro Roman Ibanez**, with **Cloud Infrastructure & DevOps automation** designed and implemented by **Youssef El Maach**. It is a modern, full-featured e-commerce platform designed for seamless online grocery shopping. It provides an intuitive user interface and a secure backend, allowing users to browse products, manage their shopping basket, and complete purchases efficiently.
 
 GroceryMate is a modern, full-featured e-commerce platform designed for seamless online grocery shopping. It provides an intuitive user interface and a secure backend, allowing users to browse products, manage their shopping basket, and complete purchases efficiently.
 
@@ -55,6 +56,49 @@ GroceryMate is a modern, full-featured e-commerce platform designed for seamless
 ![imagen](https://github.com/user-attachments/assets/2772b85e-81f7-446a-9296-4fdc2b652cb7)
 
 https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
+
+
+
+## ☁️ Cloud Infrastructure (AWS & Terraform)
+
+The infrastructure for this platform is fully automated using **Terraform**, ensuring a scalable and monitored environment.
+
+### 🏗 Architecture Highlights
+* **Web & Database:** Hosted on **AWS EC2** (Amazon Linux 2023) and **AWS RDS** (PostgreSQL 15), secured by custom Security Groups.
+* **Storage:** An **S3 Bucket** (`grocery-yssf`) manages user assets and avatars, including automated default image deployment.
+* **Security:** Fine-grained access control via **IAM Roles**, allowing secure communication between EC2, Lambda, and S3.
+
+### 🚨 Serverless Monitoring & Notifications
+To ensure system reliability, we implemented an event-driven monitoring pipeline:
+1. **S3 Event Trigger:** Detects new file uploads in the `avatars/` folder.
+2. **AWS Lambda:** A Python-based serverless function processes upload metadata in real-time.
+3. **SNS Alerts:** Automatically sends email notifications to the administrator for system events or errors.
+
+```mermaid
+graph TD
+    subgraph "AWS Cloud (eu-central-1)"
+        subgraph "Public Subnet"
+            EC2[EC2 Instance: Web Server]
+            RDS[(RDS: PostgreSQL)]
+        end
+
+        subgraph "Storage & Monitoring"
+            S3[S3 Bucket: User Avatars]
+            Lambda[AWS Lambda: Image Logger]
+            SNS[SNS: System Alerts]
+        end
+    end
+
+    User((User)) -->|Upload Image| EC2
+    EC2 -->|Store Image| S3
+    S3 -->|Trigger Event| Lambda
+    Lambda -->|Send Alert| SNS
+    SNS -->|Email Notification| Admin((Admin))
+
+    style EC2 fill:#f9f,stroke:#333,stroke-width:2px
+    style RDS fill:#bbf,stroke:#333,stroke-width:2px
+    style S3 fill:#dfd,stroke:#333,stroke-width:2px 
+    ```
 
 ## 📋 Prerequisites
 
