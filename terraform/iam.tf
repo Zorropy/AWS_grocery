@@ -10,7 +10,7 @@ resource "aws_iam_role" "grocery_ec2_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Service = ["ec2.amazonaws.com", "lambda.amazonaws.com"]
         }
       }
     ]
@@ -27,4 +27,16 @@ resource "aws_iam_role_policy_attachment" "s3_full_access" {
 resource "aws_iam_instance_profile" "grocery_ec2_profile" {
   name = "grocery-ec2-instance-profile"
   role = aws_iam_role.grocery_ec2_role.name
+}
+
+# Erlaubt der Rolle, Logs in CloudWatch zu schreiben
+resource "aws_iam_role_policy_attachment" "lambda_logs" {
+  role       = aws_iam_role.grocery_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# Erlaubt der Rolle, Nachrichten über SNS zu veröffentlichen
+resource "aws_iam_role_policy_attachment" "sns_publish" {
+  role       = aws_iam_role.grocery_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
