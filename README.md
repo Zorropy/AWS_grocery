@@ -75,39 +75,56 @@ To ensure system reliability, we implemented an event-driven monitoring pipeline
 3. **SNS Alerts:** Automatically sends email notifications to the administrator for system events or errors.
 
 ```mermaid
-graph LR
-    %% Definition der Cloud Umgebung
+graph TB
     subgraph AWS_Cloud ["AWS Cloud (eu-central-1)"]
         
-        subgraph Compute_DB ["Compute & Database (Public Subnet)"]
-            EC2[AWS EC2: Web Server]
-            RDS[(AWS RDS: PostgreSQL)]
+        subgraph Security ["Security & Identity"]
+            IAM["IAM Role: grocery-ec2-role<br/>(Full S3/SNS/Logs)"]
+            SG["Security Group: grocery-app-firewall<br/>(Traffic Filtering)"]
         end
 
-        subgraph Storage_Serverless ["Storage & Serverless Logic"]
-            S3[AWS S3 Bucket: Avatars]
-            Lambda[AWS Lambda: Logger]
+        subgraph VPC ["Network Layer (Default VPC)"]
+            EC2["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png' width='35'/><br/><b>EC2 Web Server</b><br/>(Flask App)"]
+            RDS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Database/RDS.png' width='35'/><br/><b>RDS Instance</b><br/>(PostgreSQL 15)"]
         end
 
-        subgraph Comms ["Communication"]
-            SNS[AWS SNS: Alerts]
+        subgraph Serverless ["Storage & Event Processing"]
+            S3["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png' width='35'/><br/><b>S3 Bucket</b><br/>(Image Assets)"]
+            Lambda["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png' width='35'/><br/><b>Lambda Function</b><br/>(Python Logger)"]
+            SNS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png' width='35'/><br/><b>SNS Topic</b><br/>(Admin Alerts)"]
         end
     end
 
-    %% Datenfluss
-    User((User)) -->|Uploads Image| EC2
-    EC2 -->|Stores File| S3
-    EC2 <-->|Queries Data| RDS
-    S3 -->|Trigger Event| Lambda
-    Lambda -->|Sends Message| SNS
-    SNS -->|Email| Admin((Admin))
+    %% Flows with Color Coding
+    User((User)) -- "Inbound (80/5000)" --> SG
+    linkStyle 0 stroke:#00fbff,stroke-width:2px,color:#00fbff
+    
+    SG -- "Authorized" --> EC2
+    linkStyle 1 stroke:#00fbff,stroke-width:2px,color:#00fbff
 
-    %% Styling für AWS Look
-    style EC2 fill:#FF9900,stroke:#fff,color:#fff
-    style S3 fill:#3F8624,stroke:#fff,color:#fff
-    style RDS fill:#3B48CC,stroke:#fff,color:#fff
-    style Lambda fill:#D05C17,stroke:#fff,color:#fff
-    style SNS fill:#CC2264,stroke:#fff,color:#fff,stroke-width:2px 
+    EC2 -- "Internal Query (5432)" --> RDS
+    linkStyle 2 stroke:#00C853,stroke-width:2px,color:#00C853
+
+    EC2 -- "IAM Authorized Upload" --> S3
+    linkStyle 3 stroke:#00C853,stroke-width:2px,color:#00C853
+
+    S3 -- "Event Trigger" --> Lambda
+    linkStyle 4 stroke:#FF9900,stroke-width:2px,color:#FF9900
+
+    Lambda -- "Publish Notification" --> SNS
+    linkStyle 5 stroke:#D11227,stroke-width:2px,color:#D11227
+
+    SNS -- "Outbound Email" --> Admin((Admin))
+    linkStyle 6 stroke:#D11227,stroke-width:2px,color:#D11227
+
+    %% Styling
+    style IAM fill:#f9f9f9,stroke:#D11227,stroke-width:2px
+    style SG fill:#f9f9f9,stroke:#607d8b,stroke-width:2px
+    style EC2 fill:#fff,stroke:#FF9900,stroke-width:2px
+    style RDS fill:#fff,stroke:#3B48CC,stroke-width:2px
+    style S3 fill:#fff,stroke:#3F8624,stroke-width:2px
+    style Lambda fill:#fff,stroke:#D05C17,stroke-width:2px
+    style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
 ```    
 
 ## 📋 Prerequisites
