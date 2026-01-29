@@ -83,15 +83,15 @@ graph TB
         end
 
         subgraph VPC ["Network Layer (Default VPC)"]
-            EC2["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png)' width='35'/><br/><b>EC2 Web Server</b>"]
-            RDS["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Database/RDS.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Database/RDS.png)' width='35'/><br/><b>RDS Instance</b>"]
+            EC2["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png' width='40'/><br/><b>EC2 Web Server</b>"]
+            RDS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Database/RDS.png' width='40'/><br/><b>RDS Instance</b>"]
         end
 
         subgraph Serverless_Monitoring ["Storage, Events & Monitoring"]
-            S3["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png)' width='35'/><br/><b>S3 Bucket</b>"]
-            Lambda["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png)' width='35'/><br/><b>Lambda Logger</b>"]
-            CW["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png)' width='35'/><br/><b>CloudWatch Alarm</b>"]
-            SNS["<img src='[https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png](https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png)' width='35'/><br/><b>SNS Topic</b>"]
+            S3["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png' width='40'/><br/><b>S3 Bucket</b>"]
+            Lambda["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png' width='40'/><br/><b>Lambda Logger</b>"]
+            CW["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png' width='40'/><br/><b>CloudWatch Alarm</b>"]
+            SNS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png' width='40'/><br/><b>SNS Topic</b>"]
         end
     end
 
@@ -121,10 +121,6 @@ graph TB
     style Lambda fill:#fff,stroke:#D05C17,stroke-width:2px
     style CW fill:#fff,stroke:#E7157B,stroke-width:2px
     style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
-    linkStyle 4 stroke:#FF9900,stroke-width:2px
-    linkStyle 5 stroke:#D11227,stroke-width:2px
-    linkStyle 6 stroke:#E7157B,stroke-width:2px,stroke-dasharray: 5
-    linkStyle 7 stroke:#D11227,stroke-width:2px
 ```
 
 ## 📋 Prerequisites
