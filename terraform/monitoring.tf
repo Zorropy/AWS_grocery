@@ -63,3 +63,23 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   # Stellt sicher, dass die Berechtigung existiert, bevor der Trigger erstellt wird
   depends_on = [aws_lambda_permission.allow_s3]
 }
+
+
+# --- CLOUDWATCH ALARM ---
+resource "aws_cloudwatch_metric_alarm" "ec2_cpu_alarm" {
+  alarm_name          = "High-CPU-Usage-Grocery-Server"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "120" # 2 Minuten
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Dieser Alarm wird ausgelöst, wenn die CPU-Last über 80% steigt."
+
+  dimensions = {
+    InstanceId = aws_instance.grocery_server.id
+  }
+
+  alarm_actions = [aws_sns_topic.grocery_alerts.arn]
+}
