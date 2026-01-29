@@ -61,7 +61,8 @@ https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
 
 ### ☁️ Cloud Infrastructure (AWS & Terraform)
 
-* <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png" width="20"/> **Networking & Connectivity:** Hosted on **AWS EC2** (t2.micro) and **AWS RDS** (PostgreSQL 15). The environment is secured via a **custom Security Group** (`grocery-app-firewall`) controlling traffic on ports **22** (SSH), **80** (HTTP), **5000** (Flask), and **5432** (Postgres).
+* <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png" width="20"/> **Networking & Connectivity:** Hosted on **AWS EC2** (t2.micro) and **AWS RDS** (PostgreSQL 15). The environment is secured via a **custom Security Group** (`grocery-app-firewall`) controlling traffic on ports **22, 80, 5000, and 5432**.
+* <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Groups/VPC.png" width="20"/> **VPC S3 Endpoint:** Implemented a **Gateway Endpoint** to ensure all traffic between EC2 and S3 remains within the private AWS backbone, improving security and reducing latency at no extra cost.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png" width="20"/> **Storage & Folders:** An **S3 Bucket** (`grocery-yssf`) manages assets with a dedicated `avatars/` directory structure, ensuring organized and scalable object storage.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/SecurityIdentityCompliance/IAMRole.png" width="20"/> **Identity & Access Management (IAM):** Implemented the **Principle of Least Privilege** using a custom IAM Role (`grocery-ec2-role`). This allows the EC2 instance and Lambda function to interact securely with S3 and SNS without using hardcoded credentials.
 
@@ -78,20 +79,21 @@ graph TB
     subgraph AWS_Cloud ["AWS Cloud (eu-central-1)"]
         
         subgraph Security ["Security & Identity"]
-            IAM["IAM Role: grocery-ec2-role<br/>(Full S3/SNS/Logs)"]
-            SG["Security Group: grocery-app-firewall<br/>(Traffic Filtering)"]
+            IAM["🛡️ IAM Role: grocery-ec2-role"]
+            SG["🔥 Security Group: grocery-app-firewall"]
         end
 
         subgraph VPC ["Network Layer (Default VPC)"]
-            EC2["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/EC2.png' width='40'/><br/><b>EC2 Web Server</b>"]
-            RDS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Database/RDS.png' width='40'/><br/><b>RDS Instance</b>"]
+            EC2["💻 <b>EC2 Web Server</b>"]
+            RDS["🐘 <b>RDS Instance</b>"]
+            VPCE["🔒 <b>VPC S3 Endpoint</b><br/>(Private Gateway)"]
         end
 
         subgraph Serverless_Monitoring ["Storage, Events & Monitoring"]
-            S3["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png' width='40'/><br/><b>S3 Bucket</b>"]
-            Lambda["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png' width='40'/><br/><b>Lambda Logger</b>"]
-            CW["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png' width='40'/><br/><b>CloudWatch Alarm</b>"]
-            SNS["<img src='https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png' width='40'/><br/><b>SNS Topic</b>"]
+            S3["📦 <b>S3 Bucket</b>"]
+            Lambda["λ <b>Lambda Logger</b>"]
+            CW["📉 <b>CloudWatch Alarm</b>"]
+            SNS["📢 <b>SNS Topic</b>"]
         end
     end
 
@@ -99,7 +101,10 @@ graph TB
     User((User)) -- "HTTP (80/5000)" --> SG
     SG -- "Traffic" --> EC2
     EC2 -- "PostgreSQL" --> RDS
-    EC2 -- "Upload" --> S3
+    
+    %% Secure Private Path to S3
+    EC2 -- "Private Request" --> VPCE
+    VPCE -- "Internal Route" --> S3
 
     %% Event Driven Pipeline
     S3 -- "s3:ObjectCreated" --> Lambda
@@ -115,13 +120,14 @@ graph TB
     %% Styling
     style IAM fill:#f9f9f9,stroke:#D11227,stroke-width:2px
     style SG fill:#f9f9f9,stroke:#607d8b,stroke-width:2px
+    style VPCE fill:#f0f0f0,stroke:#607d8b,stroke-width:2px,stroke-dasharray: 5
     style EC2 fill:#fff,stroke:#FF9900,stroke-width:2px
     style RDS fill:#fff,stroke:#3B48CC,stroke-width:2px
     style S3 fill:#fff,stroke:#3F8624,stroke-width:2px
     style Lambda fill:#fff,stroke:#D05C17,stroke-width:2px
     style CW fill:#fff,stroke:#E7157B,stroke-width:2px
     style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
-```
+```    
 
 ## 📋 Prerequisites
 
