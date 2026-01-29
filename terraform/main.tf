@@ -69,8 +69,6 @@ ingress {
   }
 }
 
-
-
 # --- EC2 INSTANCE (Server) ---
 # Erstellt den eigentlichen virtuellen Server
 resource "aws_instance" "grocery_server" {
@@ -112,4 +110,40 @@ output "server_public_ip" {
 # Gibt die Adresse (URL) der Datenbank aus
 output "database_endpoint" {
   value = aws_db_instance.grocery_db.endpoint
+}
+
+
+
+# --- VPC ENDPOINT FÜR S3 ---
+# Ermöglicht der EC2-Instanz den Zugriff auf S3-Buckets über das private AWS-Backbone-Netzwerk.
+# Dies erhöht die Sicherheit, da der Datenverkehr nicht über das öffentliche Internet läuft,
+# und reduziert Latenzen – und das ohne zusätzliche Kosten.
+resource "aws_vpc_endpoint" "s3_gateway" {
+  vpc_id       = data.aws_vpc.default.id
+  service_name = "com.amazonaws.eu-central-1.s3"
+
+  # Injiziert die S3-Präfixliste automatisch in die Standard-Routentabelle
+  route_table_ids = [data.aws_route_table.default.id]
+
+  tags = {
+    Name        = "grocery-s3-gateway-endpoint"
+    Environment = "Production"
+  }
+}
+
+# --- DATENQUELLE FÜR ROUTENTABELLE ---
+# Ruft dynamisch die ID der Standard-Routentabelle ab, die für die
+# Verknüpfung des Gateway-Endpoints benötigt wird.
+data "aws_route_table" "default" {
+  vpc_id = data.aws_vpc.default.id
+  filter {
+    name   = "default-route-table"
+    values = ["true"]
+  }
+}
+
+# --- DATENQUELLE FÜR DAS VPC ---
+# Ruft die Informationen des Standard-VPC ab, in dem die Ressourcen erstellt werden.
+data "aws_vpc" "default" {
+  default = true
 }
