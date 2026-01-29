@@ -75,33 +75,42 @@ To ensure system reliability, we implemented an event-driven monitoring pipeline
 3. **SNS Alerts:** Automatically sends email notifications to the administrator for system events or errors.
 
 ```mermaid
-graph TD
-    subgraph "AWS Cloud (eu-central-1)"
-        subgraph "Public Subnet"
-            EC2[EC2 Instance: Web Server]
-            RDS[(RDS: PostgreSQL)]
+graph LR
+    %% Definition der Cloud Umgebung
+    subgraph AWS_Cloud ["AWS Cloud (eu-central-1)"]
+        
+        subgraph Compute_DB ["Compute & Database (Public Subnet)"]
+            EC2[AWS EC2: Web Server]
+            RDS[(AWS RDS: PostgreSQL)]
         end
 
-        subgraph "Storage & Monitoring"
-            S3[S3 Bucket: User Avatars]
-            Lambda[AWS Lambda: Image Logger]
-            SNS[SNS: System Alerts]
+        subgraph Storage_Serverless ["Storage & Serverless Logic"]
+            S3[AWS S3 Bucket: Avatars]
+            Lambda[AWS Lambda: Logger]
+        end
+
+        subgraph Comms ["Communication"]
+            SNS[AWS SNS: Alerts]
         end
     end
 
-    User((User)) -->|Upload Image| EC2
-    EC2 -->|Store Image| S3
+    %% Datenfluss
+    User((User)) -->|Uploads Image| EC2
+    EC2 -->|Stores File| S3
+    EC2 <-->|Queries Data| RDS
     S3 -->|Trigger Event| Lambda
-    Lambda -->|Send Alert| SNS
-    SNS -->|Email Notification| Admin((Admin))
+    Lambda -->|Sends Message| SNS
+    SNS -->|Email| Admin((Admin))
 
-    style EC2 fill:#f9f,stroke:#333,stroke-width:2px
-    style RDS fill:#bbf,stroke:#333,stroke-width:2px
-    style S3 fill:#dfd,stroke:#333,stroke-width:2px 
-    ```
+    %% Styling für AWS Look
+    style EC2 fill:#FF9900,stroke:#fff,color:#fff
+    style S3 fill:#3F8624,stroke:#fff,color:#fff
+    style RDS fill:#3B48CC,stroke:#fff,color:#fff
+    style Lambda fill:#D05C17,stroke:#fff,color:#fff
+    style SNS fill:#CC2264,stroke:#fff,color:#fff,stroke-width:2px 
+```    
+![Mein AWS Diagramm](architecture_aws.png)
 
-
-```
 ## 📋 Prerequisites
 
 Ensure the following dependencies are installed before running the application:
