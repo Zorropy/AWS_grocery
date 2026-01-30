@@ -77,23 +77,23 @@ We implemented a fully decoupled, event-driven pipeline:
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png" width="20"/> **Monitoring & Alerting:** Configured a **CloudWatch Metric Alarm** to monitor EC2 CPU utilization. If the load exceeds 80% for more than 2 minutes, an automated notification is triggered via **AWS SNS**, sending a real-time alert to the administrator's email.
 ```mermaid
 graph TB
-    subgraph AWS_Cloud ["🌐 AWS Cloud Ecosystem (eu-central-1)"]
+    subgraph AWS_Cloud ["☁️ AWS Cloud Ecosystem (eu-central-1)"]
         direction TB
 
-        subgraph Security ["🛡️ Security & Identity"]
+        subgraph Security ["Security & Identity"]
             direction LR
             IAM["🛡️ <b>IAM: ec2-role</b>"]
             SG["🔥 <b>SG: app-firewall</b>"]
         end
 
-        subgraph VPC ["🏢 Network Layer"]
+        subgraph VPC ["Network Layer"]
             direction TB
             EC2["💻 <b>EC2 Web Server</b>"]
             RDS["🐘 <b>RDS Instance</b>"]
             VPCE["🔒 <b>VPC S3 Endpoint</b><br/>(Private Gateway)"]
         end
 
-        subgraph Backend ["📊 Storage & Monitoring"]
+        subgraph Ops ["Storage & Monitoring"]
             direction TB
             S3["📦 <b>S3 Bucket</b>"]
             Lambda["λ <b>Lambda Logger</b>"]
@@ -102,7 +102,7 @@ graph TB
         end
     end
 
-    %% ... (Flows bleiben gleich) ...
+    %% Flows
     User((👤 User)) == "HTTP (80/5000)" ==> SG
     SG -- "Traffic" --> EC2
     EC2 -- "PostgreSQL" --> RDS
@@ -112,13 +112,24 @@ graph TB
     CW -- "Trigger (CPU > 80%)" --> SNS
     SNS ==> Admin((📧 Admin))
 
-    %% --- STYLING (Hier liegt der Fehler begraben) ---
+    %% --- Styling ---
     style AWS_Cloud fill:#f9f9f9,stroke:#232F3E,stroke-width:2px
     style Security fill:#fff1f0,stroke:#D11227,stroke-width:2px,stroke-dasharray: 0
     style VPC fill:#f0faff,stroke:#0073BB,stroke-width:2px
-    style Backend fill:#f6ffed,stroke:#2E7D32,stroke-width:2px
+    style Ops fill:#f6ffed,stroke:#2E7D32,stroke-width:2px
 
-    %% (Alle anderen Styles wie EC2, S3 etc. so lassen wie sie sind)
+    style EC2 fill:#FF9900,stroke:#FF9900,color:#fff,stroke-width:3px
+    style RDS fill:#336791,stroke:#336791,color:#fff,stroke-width:3px
+    style S3 fill:#3F8624,stroke:#3F8624,color:#fff,stroke-width:3px
+    style Lambda fill:#D05C17,stroke:#D05C17,color:#fff,stroke-width:3px
+    style SNS fill:#CC2264,stroke:#CC2264,color:#fff,stroke-width:3px
+    style CW fill:#E7157B,stroke:#E7157B,color:#fff,stroke-width:3px
+    style IAM fill:#ffffff,stroke:#D11227,color:#D11227,stroke-width:2px
+    style SG fill:#546E7A,stroke:#546E7A,color:#fff,stroke-width:2px
+    style VPCE fill:#ffffff,stroke:#0073BB,stroke-width:2px,stroke-dasharray: 8 4
+
+    EC2 -. "Private Request (Planned)" .-> VPCE
+    VPCE -. "Internal Route" .-> S3
 ```    
 
 
