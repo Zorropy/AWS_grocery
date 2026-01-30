@@ -114,25 +114,24 @@ graph TB
     %% Notification Outbound
     SNS -- "Email" --> Admin((Admin))
 
-%% --- The "Pimp my Diagram" Styling ---
+%%% --- Subgraph Backgrounds ---
     style AWS_Cloud fill:#f9f9f9,stroke:#232F3E,stroke-width:2px
-    style Security fill:#fff1f0,stroke:#D11227,stroke-dasharray: 5
+    style Security fill:#fff1f0,stroke:#D11227,stroke-dasharray: 0  %% Dash auf 0 gesetzt = Normale Umrandung
     style Network fill:#f0faff,stroke:#0073BB
     style Ops fill:#f6ffed,stroke:#2E7D32
 
-    %% Solid Colors with White Text for High Contrast (Fake Depth)
+    %% --- Resource Styling ---
     style EC2 fill:#FF9900,stroke:#FF9900,color:#fff,stroke-width:3px
     style RDS fill:#336791,stroke:#336791,color:#fff,stroke-width:3px
     style S3 fill:#3F8624,stroke:#3F8624,color:#fff,stroke-width:3px
     style Lambda fill:#D05C17,stroke:#D05C17,color:#fff,stroke-width:3px
     style SNS fill:#CC2264,stroke:#CC2264,color:#fff,stroke-width:3px
     style CW fill:#E7157B,stroke:#E7157B,color:#fff,stroke-width:3px
-    
-    %% Special Styling for IAM & SG
-    style IAM fill:#fff,stroke:#D11227,color:#D11227,stroke-width:2px
+    style IAM fill:#ffffff,stroke:#D11227,color:#D11227,stroke-width:2px
     style SG fill:#546E7A,stroke:#546E7A,color:#fff,stroke-width:2px
-    style VPCE fill:#fff,stroke:#0073BB,stroke-width:2px,stroke-dasharray: 8 4
     
+    %% Endpoint bleibt gestrichelt(inactiv)
+    style VPCE fill:#ffffff,stroke:#0073BB,stroke-width:2px,stroke-dasharray: 8 4
  
     EC2 -. "Private Request (Planned)" .-> VPCE
     VPCE -. "Internal Route" .-> S3
