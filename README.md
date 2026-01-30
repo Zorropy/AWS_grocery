@@ -125,33 +125,27 @@ graph TB
     style CW fill:#fff,stroke:#E7157B,stroke-width:2px
     style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
     
-    %% Ändere diese zwei Zeilen im Mermaid Code:
+ 
     EC2 -. "Private Request (Planned)" .-> VPCE
     VPCE -. "Internal Route" .-> S3
 ```    
 
-🛠️ How to Deploy the Infrastructure
+
+### **🛠️ How to Deploy the Infrastructure**
 
 To replicate this environment, follow these steps:
 
-    Prerequisites: Ensure you have Terraform installed and your AWS credentials configured.
+* **Prerequisites**: Ensure you have **Terraform** installed and your **AWS credentials** configured.
 
- 
-**Initialize**: Navigate to the terraform directory and initialize:
-
-```Bash
-   cd terraform
-   terraform init
+* **Initialize**: Navigate to the `terraform` directory and initialize the environment:
+```bash
+  cd terraform
+  terraform init
 ```
 
-Configure Variables: Create a terraform.tfvars file (not included in the repo for security) and provide:
-
-    db_password (Your RDS password)
-
-    user_email (For SNS notifications)
-
-Deploy: Review the plan and apply the configuration:
-
+* **Configure Variables**: Create a `terraform.tfvars` file (not included in the repo for security) and provide:
+  * `db_password` (Your RDS password)
+  * `user_email` (For SNS notifications)
 ```Bash
 terraform plan
 terraform apply
