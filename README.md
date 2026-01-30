@@ -136,28 +136,31 @@ To replicate this environment, follow these steps:
 
     Prerequisites: Ensure you have Terraform installed and your AWS credentials configured.
 
-    Initialize: Navigate to the terraform directory and initialize the provider:
-    Bash
+ 
+**Initialize**: Navigate to the terraform directory and initialize:
 
-cd terraform
-terraform init
+```Bash
+   cd terraform
+   terraform init
+```
 
 Configure Variables: Create a terraform.tfvars file (not included in the repo for security) and provide:
 
-    db_password
+    db_password (Your RDS password)
 
-    user_email (for SNS notifications)
+    user_email (For SNS notifications)
 
 Deploy: Review the plan and apply the configuration:
-Bash
 
+```Bash
 terraform plan
 terraform apply
+```
 
 Access: Once complete, Terraform will output the server_public_ip and database_endpoint.
 
 
------------
+---
 
 
 ## 📋 Prerequisites
