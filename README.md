@@ -156,6 +156,10 @@ terraform apply
 
 Access: Once complete, Terraform will output the server_public_ip and database_endpoint.
 
+
+-----------
+
+
 ## 📋 Prerequisites
 
 Ensure the following dependencies are installed before running the application:
