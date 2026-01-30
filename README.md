@@ -80,17 +80,17 @@ graph TB
     subgraph AWS_Cloud ["AWS Cloud (eu-central-1)"]
         
         subgraph Security ["Security & Identity"]
-            IAM["🛡️ IAM Role: grocery-ec2-role"]
-            SG["🔥 Security Group: grocery-app-firewall"]
+            IAM["🛡️ IAM: ec2-role"]
+            SG["🔥 SG: app-firewall"]
         end
 
-        subgraph VPC ["Network Layer (Default VPC)"]
+        subgraph VPC ["Network Layer"]
             EC2["💻 <b>EC2 Web Server</b>"]
             RDS["🐘 <b>RDS Instance</b>"]
             VPCE["🔒 <b>VPC S3 Endpoint</b><br/>(Private Gateway)"]
         end
 
-        subgraph Serverless_Monitoring ["Storage, Events & Monitoring"]
+        subgraph Serverless_Monitoring ["Ops & Monitoring"]
             S3["📦 <b>S3 Bucket</b>"]
             Lambda["λ <b>Lambda Logger</b>"]
             CW["📉 <b>CloudWatch Alarm</b>"]
@@ -114,16 +114,24 @@ graph TB
     %% Notification Outbound
     SNS -- "Email" --> Admin((Admin))
 
-    %% Styling
-    style IAM fill:#f9f9f9,stroke:#D11227,stroke-width:2px
-    style SG fill:#f9f9f9,stroke:#607d8b,stroke-width:2px
-    style VPCE fill:#f0f0f0,stroke:#607d8b,stroke-width:2px,stroke-dasharray: 5
-    style EC2 fill:#fff,stroke:#FF9900,stroke-width:2px
-    style RDS fill:#fff,stroke:#3B48CC,stroke-width:2px
-    style S3 fill:#fff,stroke:#3F8624,stroke-width:2px
-    style Lambda fill:#fff,stroke:#D05C17,stroke-width:2px
-    style CW fill:#fff,stroke:#E7157B,stroke-width:2px
-    style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
+%% --- The "Pimp my Diagram" Styling ---
+    style AWS_Cloud fill:#f9f9f9,stroke:#232F3E,stroke-width:2px
+    style Security fill:#fff1f0,stroke:#D11227,stroke-dasharray: 5
+    style Network fill:#f0faff,stroke:#0073BB
+    style Ops fill:#f6ffed,stroke:#2E7D32
+
+    %% Solid Colors with White Text for High Contrast (Fake Depth)
+    style EC2 fill:#FF9900,stroke:#FF9900,color:#fff,stroke-width:3px
+    style RDS fill:#336791,stroke:#336791,color:#fff,stroke-width:3px
+    style S3 fill:#3F8624,stroke:#3F8624,color:#fff,stroke-width:3px
+    style Lambda fill:#D05C17,stroke:#D05C17,color:#fff,stroke-width:3px
+    style SNS fill:#CC2264,stroke:#CC2264,color:#fff,stroke-width:3px
+    style CW fill:#E7157B,stroke:#E7157B,color:#fff,stroke-width:3px
+    
+    %% Special Styling for IAM & SG
+    style IAM fill:#fff,stroke:#D11227,color:#D11227,stroke-width:2px
+    style SG fill:#546E7A,stroke:#546E7A,color:#fff,stroke-width:2px
+    style VPCE fill:#fff,stroke:#0073BB,stroke-width:2px,stroke-dasharray: 8 4
     
  
     EC2 -. "Private Request (Planned)" .-> VPCE
