@@ -76,7 +76,7 @@ We implemented a fully decoupled, event-driven pipeline:
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png" width="20"/> **SNS Alerts:** Dispatches real-time email notifications via an **SNS Topic**, ensuring the administrator is informed of every successful upload.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png" width="20"/> **Monitoring & Alerting:** Configured a **CloudWatch Metric Alarm** to monitor EC2 CPU utilization. If the load exceeds 80% for more than 2 minutes, an automated notification is triggered via **AWS SNS**, sending a real-time alert to the administrator's email.
 ```mermaid
-graph TB
+ggraph TB
     subgraph AWS_Cloud ["<b style='font-size:18px'>🌐 AWS Cloud Ecosystem (eu-central-1)</b>"]
         direction TB
 
@@ -118,7 +118,7 @@ graph TB
     %% Notification Outbound
     SNS ==> Admin((📧 Admin))
 
-    %% --- Styling (Cleaned from inline comments) ---
+    %% --- Styling (Bereinigt von Inline-Kommentaren) ---
     style AWS_Cloud fill:#f9f9f9,stroke:#232F3E,stroke-width:2px
     style Security fill:#fff1f0,stroke:#D11227,stroke-width:2px,stroke-dasharray: 0
     style VPC fill:#f0faff,stroke:#0073BB,stroke-width:2px
