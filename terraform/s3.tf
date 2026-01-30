@@ -1,6 +1,8 @@
 # Erstellt den S3-Speicherbehälter (Bucket)
 resource "aws_s3_bucket" "avatar_bucket" {
   bucket = "grocery-yssf"                            # Der weltweit eindeutige Name des Buckets
+  force_destroy = true
+
 
   # Metadaten zur Organisation der Ressourcen
   tags = {
@@ -19,6 +21,6 @@ resource "aws_s3_object" "folder" {
 resource "aws_s3_object" "default_avatar" {
   bucket       = aws_s3_bucket.avatar_bucket.id      # Ziel-Bucket für den Upload
   key          = "avatars/images_avatar_aws.png"     # Zielpfad und Dateiname innerhalb von S3
-  source       = "images_avatar_aws.png"             # Pfad zur Datei auf deinem lokalen Rechner
+  source       = "aws-avatar.jpg"             # Pfad zur Datei auf deinem lokalen Rechner
   content_type = "image/png"                         # Definiert den Dateityp (wichtig für die Anzeige im Browser)
 }
