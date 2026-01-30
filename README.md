@@ -66,6 +66,8 @@ https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Storage/SimpleStorageService.png" width="20"/> **Storage & Folders:** An **S3 Bucket** (`grocery-yssf`) manages assets with a dedicated `avatars/` directory structure, ensuring organized and scalable object storage.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/SecurityIdentityCompliance/IAMRole.png" width="20"/> **Identity & Access Management (IAM):** Implemented the **Principle of Least Privilege** using a custom IAM Role (`grocery-ec2-role`). This allows the EC2 instance and Lambda function to interact securely with S3 and SNS without using hardcoded credentials.
 
+⚠️ Note on VPC Endpoint: The S3 Gateway Endpoint is part of the architectural design. In the current deployment, the Terraform resource is documented but commented out due to AWS Service Control Policy (SCP) restrictions in the lab environment.
+
 ### 🚨 Serverless (Lambda) Monitoring & Notifications
 
 We implemented a fully decoupled, event-driven pipeline:
@@ -73,7 +75,6 @@ We implemented a fully decoupled, event-driven pipeline:
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Compute/Lambda.png" width="20"/> **AWS Lambda:** A Python-based function ("Logger") that assumes the IAM role to process metadata and log system activity.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/Messaging/SimpleNotificationService.png" width="20"/> **SNS Alerts:** Dispatches real-time email notifications via an **SNS Topic**, ensuring the administrator is informed of every successful upload.
 * <img src="https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist/ManagementGovernance/CloudWatch.png" width="20"/> **Monitoring & Alerting:** Configured a **CloudWatch Metric Alarm** to monitor EC2 CPU utilization. If the load exceeds 80% for more than 2 minutes, an automated notification is triggered via **AWS SNS**, sending a real-time alert to the administrator's email.
-
 ```mermaid
 graph TB
     subgraph AWS_Cloud ["AWS Cloud (eu-central-1)"]
@@ -102,10 +103,6 @@ graph TB
     SG -- "Traffic" --> EC2
     EC2 -- "PostgreSQL" --> RDS
     
-    %% Secure Private Path to S3
-    EC2 -- "Private Request" --> VPCE
-    VPCE -- "Internal Route" --> S3
-
     %% Event Driven Pipeline
     S3 -- "s3:ObjectCreated" --> Lambda
     Lambda -- "Publish Alert" --> SNS
@@ -127,6 +124,10 @@ graph TB
     style Lambda fill:#fff,stroke:#D05C17,stroke-width:2px
     style CW fill:#fff,stroke:#E7157B,stroke-width:2px
     style SNS fill:#fff,stroke:#CC2264,stroke-width:2px
+    
+    %% Ändere diese zwei Zeilen im Mermaid Code:
+    EC2 -. "Private Request (Planned)" .-> VPCE
+    VPCE -. "Internal Route" .-> S3
 ```    
 
 ## 📋 Prerequisites
